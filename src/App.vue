@@ -72,7 +72,7 @@ export default {
       } 
     },
     async getDataFromApi(query){
-      if(query.length <= 2 ) return;
+      if(query.length < 2 ) return;
       this.showSpinner = true;
       try{
         const data = await fetch(config.API_URL, {
@@ -100,6 +100,10 @@ export default {
     },
     toggleSearch(){
       this.autoSearchEnabled = !this.autoSearchEnabled;
+    }
+  },
+  watch: {
+    autoSearchEnabled(){
       if( this.autoSearchEnabled )
         this.getDataFromApi( this.textToSearch )
     }
