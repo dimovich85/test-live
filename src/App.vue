@@ -6,7 +6,7 @@
     </header>
     <main class="main">
       <InfoRow  v-for="(row, ind) in rows" :key="row.text" :text="row.text">
-        <Button @click.stop="onAdd(ind)" :text="rowBtn" bgColor="#40B159"></Button>
+        <Button @click="onAdd(ind)" :text="rowBtn" bgColor="#40B159"></Button>
       </InfoRow>
       <div class="added-list" v-if="savedRows.length">
         <hr>
@@ -19,7 +19,7 @@
       </div>
     </main>
     <footer class="footer">
-      <Button bgColor="#7382CD" :text="footerBtnText"></Button>
+      <Button @click="toggleSearch" bgColor="#7382CD" :text="footerBtnText"></Button>
     </footer>
   </div>
 </template>
@@ -66,12 +66,13 @@ export default {
   },
   methods: {
     onInputText(text){
-      if( text.length >= 2 && this.autoSearchEnabled ){
-        this.textToSearch = text;
+      this.textToSearch = text;
+      if( this.autoSearchEnabled ){
         this.getDataFromApi(text);
       } 
     },
     async getDataFromApi(query){
+      if(query.length <= 2 ) return;
       this.showSpinner = true;
       try{
         const data = await fetch(config.API_URL, {
@@ -93,8 +94,14 @@ export default {
       }
     },
     onAdd(ind){
-      this.savedRows.push( this.rows[ind] );
-      console.log(this.savedRows);
+      const candidate = this.rows[ind];
+      if( !this.savedRows.includes(candidate) )
+        this.savedRows.push( candidate );
+    },
+    toggleSearch(){
+      this.autoSearchEnabled = !this.autoSearchEnabled;
+      if( this.autoSearchEnabled )
+        this.getDataFromApi( this.textToSearch )
     }
   }
 }
@@ -119,8 +126,19 @@ export default {
     grid-template-rows: 53px 1fr;
   }
   .header{
-    display: flex;
-    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+  .header input{
+    width: 100%;
+    padding-right: 45px;
+    z-index: 2;
+  }
+  .header .spinner-container{
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 3;
   }
   .added-list--head{
     padding-left: 16px;
