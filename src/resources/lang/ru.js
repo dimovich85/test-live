@@ -13,5 +13,8 @@ export default {
             onEnabled: 'Отключить автопоиск',
             onDisabled: 'Включить автопоиск'
         }
+    },
+    alerts: {
+        onFetchError: 'Что-то пошло не так. Попробуйте еще раз.'
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <input type="text" :placeholder="placeholder">
+  <input v-model="text" type="text" :placeholder="placeholder">
 </template>
 
 <script>
@@ -7,8 +7,18 @@ export default {
   name: 'Input',
   props: {
     placeholder: String,
-    value: String,
     type: String
+  },
+  data(){
+    return {
+      text: ''
+    }
+  },
+  watch: {
+    text(){
+      let text = this.text.trim();
+      if( text.length !== 0 ) this.$emit('writeText', text);
+    }
   }
 }
 </script>

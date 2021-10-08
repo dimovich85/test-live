@@ -1,5 +1,5 @@
 <template>
-    <button :style="styles"> {{ text }} </button>
+    <button @click="emitClick" :style="styles"> {{ text }} </button>
 </template>
 
 <script>
@@ -13,6 +13,11 @@ export default {
       styles(){
           return `background-color: ${this.bgColor};`;
       }
+  },
+  methods: {
+    emitClick(e){
+      this.$emit('click', e);
+    }
   }
 }
 </script>
